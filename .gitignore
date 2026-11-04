@@ -1,0 +1,36 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Next.js build output
+/.next/
+/out/
+
+# Environment variables
+.env*
+!.env.example
+
+# macOS / OS metadata
+.DS_Store
+Thumbs.db
+*.pem
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Backup, temporary, and test folders
+frames_original/
+frames_test/
+tmp/
+temp/
+scratch/
+.system_generated/
