@@ -21,6 +21,7 @@ export default function CanvasSequence({
   // Images cache
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const currentIndexRef = useRef<number>(0);
+  const targetFrameRef = useRef<number>(0);
   const rafIdRef = useRef<number | null>(null);
 
   // Loading state
@@ -30,7 +31,7 @@ export default function CanvasSequence({
   const [bgMatchedColor, setBgMatchedColor] = useState<string>('#050505');
 
   // Total frames count
-  const totalFrames = frameCount || initialFrames.length || 238;
+  const totalFrames = frameCount || initialFrames.length || 0;
 
   // Eyedrop exact background color from the first loaded frame
   const sampleFrameBackground = useCallback((img: HTMLImageElement) => {
@@ -119,10 +120,11 @@ export default function CanvasSequence({
     }
   }, [renderFrame]);
 
-  // Preload all frames sequentially/batched before showing animation
+  // Preload frames in batches and start experience once first 20% are loaded
   useEffect(() => {
     let isCancelled = false;
     let count = 0;
+    let hasStarted = false;
     const images: HTMLImageElement[] = [];
 
     // Pre-allocate array
@@ -130,6 +132,23 @@ export default function CanvasSequence({
       images.push(new Image());
     }
     imagesRef.current = images;
+
+    // Start experience once 20% of frames are loaded
+    const readyThreshold = totalFrames > 0 ? Math.max(1, Math.ceil(totalFrames * 0.2)) : 0;
+
+    const checkReady = () => {
+      if (!hasStarted && (count >= readyThreshold || count === totalFrames)) {
+        hasStarted = true;
+        setIsLoaded(true);
+        handleResize();
+        renderFrame(0);
+      }
+    };
+
+    if (totalFrames === 0) {
+      checkReady();
+      return;
+    }
 
     const loadFrame = (index: number) => {
       if (isCancelled || index >= totalFrames) return;
@@ -151,10 +170,10 @@ export default function CanvasSequence({
           renderFrame(0);
         }
 
-        if (count === totalFrames) {
-          setIsLoaded(true);
-          handleResize();
-          renderFrame(0);
+        checkReady();
+
+        if (index === targetFrameRef.current) {
+          renderFrame(index);
         }
       };
 
@@ -162,10 +181,7 @@ export default function CanvasSequence({
         if (isCancelled) return;
         count++;
         setLoadedCount(count);
-        if (count === totalFrames) {
-          setIsLoaded(true);
-          renderFrame(0);
-        }
+        checkReady();
       };
     };
 
@@ -224,6 +240,8 @@ export default function CanvasSequence({
           Math.max(0, Math.floor(progress * (totalFrames - 1)))
         );
 
+        targetFrameRef.current = targetFrame;
+
         if (targetFrame !== currentIndexRef.current) {
           renderFrame(targetFrame);
         }
@@ -268,8 +286,6 @@ export default function CanvasSequence({
     };
   };
 
-  const progressPercent = Math.min(100, Math.round((loadedCount / totalFrames) * 100));
-
   return (
     <div
       ref={containerRef}
@@ -288,36 +304,25 @@ export default function CanvasSequence({
           {/* Subtle Radial Glow */}
           <div className="absolute inset-0 radial-hero-glow pointer-events-none" />
 
-          <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-md">
-            {/* Sony Brandmark */}
-            <div className="flex items-center space-x-2.5 mb-8">
-              <span className="text-xs uppercase tracking-[0.3em] font-semibold text-white/90">
-                SONY
+          <div className="relative z-10 flex flex-col items-center text-center px-6">
+            <div className="flex items-center space-x-2.5 mb-4">
+              <span className="text-xs uppercase tracking-[0.25em] font-medium text-white/80 font-mono">
+                Loading
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-pulse" />
-              <span className="text-xs tracking-wider text-white/60 font-mono">
-                FLAGSHIP ACOUSTICS
-              </span>
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-gradient-white mb-2">
-              WH-1000XM6
-            </h2>
-            <p className="text-xs text-white/50 tracking-wide mb-8">
-              Calibrating master 8K exploded technical sequence...
-            </p>
-
-            {/* Premium Progress Bar */}
-            <div className="w-64 h-[2px] bg-white/10 rounded-full overflow-hidden relative mb-4">
+            {/* Minimal thin progress bar with no numbers */}
+            <div className="w-40 h-[2px] bg-white/10 rounded-full overflow-hidden relative">
               <div
                 className="h-full bg-gradient-to-r from-accent-blue via-accent-cyan to-white transition-all duration-150 ease-out rounded-full"
-                style={{ width: `${progressPercent}%` }}
+                style={{
+                  width:
+                    totalFrames > 0
+                      ? `${Math.min(100, Math.round((loadedCount / Math.max(1, Math.ceil(totalFrames * 0.2))) * 100))}%`
+                      : '0%',
+                }}
               />
-            </div>
-
-            <div className="flex items-center justify-between w-64 text-[11px] font-mono text-white/40">
-              <span>{loadedCount} / {totalFrames} FRAMES</span>
-              <span className="text-accent-cyan font-semibold">{progressPercent}%</span>
             </div>
           </div>
         </div>
