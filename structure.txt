@@ -1,0 +1,29 @@
+sony-xm6-site
+├── README.md
+├── app
+│   ├── api
+│   │   └── frames
+│   │       └── route.ts
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components
+│   ├── AcousticShowcase.tsx
+│   ├── CanvasSequence.tsx
+│   ├── ColorSelector.tsx
+│   ├── FeatureGrid.tsx
+│   ├── Footer.tsx
+│   ├── Navbar.tsx
+│   ├── PreOrderModal.tsx
+│   ├── ProductPage.tsx
+│   └── TechSpecs.tsx
+├── next-env.d.ts
+├── next.config.mjs
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── public
+│   └── frames
+├── structure.txt
+├── tailwind.config.js
+└── tsconfig.json
