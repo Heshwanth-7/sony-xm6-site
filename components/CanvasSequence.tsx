@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { ArrowDown, Loader2, Sparkles, ChevronDown } from 'lucide-react';
+import { getAssetPath } from '@/lib/basePath';
 
 interface CanvasSequenceProps {
   initialFrames: string[];
@@ -133,7 +134,9 @@ export default function CanvasSequence({
     const loadFrame = (index: number) => {
       if (isCancelled || index >= totalFrames) return;
       const img = images[index];
-      const frameUrl = initialFrames[index] || `/frames/frame_${String(index + 1).padStart(4, '0')}.jpg`;
+      const frameUrl =
+        initialFrames[index] ||
+        getAssetPath(`/frames/frame_${String(index + 1).padStart(4, '0')}.webp`);
 
       img.src = frameUrl;
       img.onload = () => {
