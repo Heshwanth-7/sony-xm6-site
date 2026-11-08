@@ -51,7 +51,7 @@ An Apple-level, Awwwards-inspired scrollytelling product landing page for the fl
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/your-username/sony-xm6-site.git
+   git clone https://github.com/Heshwanth-7/sony-xm6-site.git
    cd sony-xm6-site
    ```
 
@@ -102,7 +102,7 @@ sony-xm6-site/
 │   ├── ProductPage.tsx          # Main page coordinator component
 │   └── TechSpecs.tsx            # Comprehensive technical datasheet
 ├── public/
-│   └── frames/                  # Master 2560x1440 image sequence (frame_0001.jpg -> frame_0238.jpg)
+│   └── frames/                  # Master 1920-wide image sequence (frame_0001.webp -> frame_0238.webp)
 ├── .gitignore                   # Git exclusion rules
 ├── next.config.mjs              # Next.js configuration
 ├── package.json                 # Scripts and dependencies
@@ -115,7 +115,7 @@ sony-xm6-site/
 
 ## 🎞 How the Frames Work
 
-1. **Storage**: High-resolution 2560×1440 frames reside in `public/frames/` (`frame_0001.jpg` through `frame_0238.jpg`).
+1. **Storage**: High-resolution 1920-wide frames reside in `public/frames/` (`frame_0001.webp` through `frame_0238.webp`).
 2. **Dynamic Detection**: Rather than relying on a hardcoded frame count, `app/page.tsx` and `/api/frames` read the real directory contents using Node's filesystem module (`fs.readdirSync`) and sort them numerically.
 3. **Preloading**: `CanvasSequence.tsx` loads the image files in controlled batches on client mount. A sleek calibration screen displays loading progress until the full sequence is ready in memory.
 4. **Scroll Mapping**: As the user scrolls through the 480vh sticky viewport, the scroll progress `[0, 1]` is mapped to the frame index `[0, frameCount - 1]`.
