@@ -4,8 +4,8 @@ import React from 'react';
 
 export default function Footer() {
   return (
-    <footer className="relative bg-[#050505] text-white/50 text-xs border-t border-white/10 pt-10 pb-8 md:pt-20 md:pb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+    <footer className="relative bg-[#050505] text-white/50 text-xs border-t border-white/10 pt-12 pb-10 md:pt-20 md:pb-16">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
         {/* Top Badges / Certifications */}
         <div className="flex flex-wrap items-center justify-between gap-3 md:gap-6 pb-6 md:pb-12 border-b border-white/5">
           <div className="flex items-center space-x-2.5 md:space-x-3">

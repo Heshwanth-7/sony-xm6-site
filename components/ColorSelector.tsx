@@ -52,9 +52,9 @@ export default function ColorSelector({ onPreOrderClick }: ColorSelectorProps) {
   const current = colors[selectedColor];
 
   return (
-    <section className="relative py-12 md:py-28 bg-[#050505] text-white border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-6 md:mb-16">
+    <section className="relative py-16 md:py-28 bg-[#050505] text-white border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-16">
           <div className="inline-flex items-center space-x-1.5 md:space-x-2 px-2.5 py-1 md:px-3 md:py-1 rounded-full glass-panel border border-white/10 mb-2.5 md:mb-4">
             <Palette className="w-3 h-3 md:w-3.5 md:h-3.5 text-accent-cyan" />
             <span className="text-[10px] md:text-[11px] uppercase tracking-wider md:tracking-[0.2em] text-white/70 font-mono">
@@ -70,7 +70,7 @@ export default function ColorSelector({ onPreOrderClick }: ColorSelectorProps) {
         </div>
 
         {/* Color Display Card */}
-        <div className="glass-panel p-4 sm:p-8 md:p-12 rounded-xl md:rounded-3xl border border-white/10 max-w-4xl mx-auto relative overflow-hidden">
+        <div className="glass-panel p-5 sm:p-8 md:p-12 rounded-2xl md:rounded-3xl border border-white/10 max-w-4xl mx-auto relative overflow-hidden">
           {/* Subtle colored backlight */}
           <div
             className="absolute -top-24 -right-24 w-80 h-80 rounded-full blur-[100px] pointer-events-none transition-colors duration-700"

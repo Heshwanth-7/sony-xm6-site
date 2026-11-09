@@ -5,13 +5,13 @@ import { Cpu, BatteryCharging, Mic, ShieldCheck, Zap, Headphones, Compass, Spark
 
 export default function FeatureGrid() {
   return (
-    <section id="technology" className="relative py-12 md:py-32 bg-[#050505] text-white overflow-hidden border-t border-white/5">
+    <section id="technology" className="relative py-16 md:py-32 bg-[#050505] text-white overflow-hidden border-t border-white/5">
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] radial-hero-glow pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
         {/* Section Heading */}
-        <div className="text-center max-w-3xl mx-auto mb-6 md:mb-20">
+        <div className="text-center max-w-3xl mx-auto mb-10 md:mb-20">
           <div className="inline-flex items-center space-x-1.5 md:space-x-2 px-2.5 py-1 md:px-3 md:py-1 rounded-full glass-panel border border-white/10 mb-2.5 md:mb-4">
             <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5 text-accent-cyan" />
             <span className="text-[10px] md:text-[11px] uppercase tracking-wider md:tracking-[0.2em] text-white/70 font-mono">
@@ -29,7 +29,7 @@ export default function FeatureGrid() {
         {/* Bento Box Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
           {/* Card 1: Dual Processor (Large 2-col) */}
-          <div className="md:col-span-2 glass-panel p-4 sm:p-5 md:p-8 rounded-xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
+          <div className="md:col-span-2 glass-panel p-5 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
             <div className="absolute top-0 right-0 w-64 h-64 bg-accent-blue/10 rounded-full blur-3xl pointer-events-none group-hover:bg-accent-blue/20 transition-all" />
             <div className="p-2.5 md:p-3 bg-white/5 w-fit rounded-xl md:rounded-2xl mb-4 md:mb-6 text-accent-cyan">
               <Cpu className="w-5 h-5 md:w-6 md:h-6" />
@@ -60,7 +60,7 @@ export default function FeatureGrid() {
           </div>
 
           {/* Card 2: 45-Hour Battery */}
-          <div className="glass-panel p-4 sm:p-5 md:p-8 rounded-xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500 flex flex-col justify-between">
+          <div className="glass-panel p-5 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500 flex flex-col justify-between">
             <div>
               <div className="p-2.5 md:p-3 bg-white/5 w-fit rounded-xl md:rounded-2xl mb-4 md:mb-6 text-accent-cyan">
                 <BatteryCharging className="w-5 h-5 md:w-6 md:h-6" />
@@ -82,7 +82,7 @@ export default function FeatureGrid() {
           </div>
 
           {/* Card 3: Beamforming 8-Mic Array */}
-          <div className="glass-panel p-4 sm:p-5 md:p-8 rounded-xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500 flex flex-col justify-between">
+          <div className="glass-panel p-5 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500 flex flex-col justify-between">
             <div>
               <div className="p-2.5 md:p-3 bg-white/5 w-fit rounded-xl md:rounded-2xl mb-4 md:mb-6 text-accent-cyan">
                 <Mic className="w-5 h-5 md:w-6 md:h-6" />
@@ -104,7 +104,7 @@ export default function FeatureGrid() {
           </div>
 
           {/* Card 4: 40mm Carbon-Bio Transducer */}
-          <div className="glass-panel p-4 sm:p-5 md:p-8 rounded-xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
+          <div className="glass-panel p-5 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
             <div className="p-2.5 md:p-3 bg-white/5 w-fit rounded-xl md:rounded-2xl mb-4 md:mb-6 text-accent-cyan">
               <Headphones className="w-5 h-5 md:w-6 md:h-6" />
             </div>
@@ -120,7 +120,7 @@ export default function FeatureGrid() {
           </div>
 
           {/* Card 5: Spatial Head Tracking (2-col) */}
-          <div className="md:col-span-2 glass-panel p-4 sm:p-5 md:p-8 rounded-xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
+          <div className="md:col-span-2 glass-panel p-5 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
             <div className="p-2.5 md:p-3 bg-white/5 w-fit rounded-xl md:rounded-2xl mb-4 md:mb-6 text-accent-cyan">
               <Compass className="w-5 h-5 md:w-6 md:h-6" />
             </div>
@@ -146,7 +146,7 @@ export default function FeatureGrid() {
           </div>
 
           {/* Card 6: Seamless Multipoint */}
-          <div className="glass-panel p-4 sm:p-5 md:p-8 rounded-xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
+          <div className="glass-panel p-5 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
             <div className="p-2.5 md:p-3 bg-white/5 w-fit rounded-xl md:rounded-2xl mb-4 md:mb-6 text-accent-cyan">
               <Zap className="w-5 h-5 md:w-6 md:h-6" />
             </div>

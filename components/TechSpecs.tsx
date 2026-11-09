@@ -82,9 +82,9 @@ export default function TechSpecs() {
   ];
 
   return (
-    <section id="specs" className="relative py-12 md:py-32 bg-[#0A0A0C] text-white border-t border-white/5">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8">
-        <div className="text-center mb-6 md:mb-16">
+    <section id="specs" className="relative py-16 md:py-32 bg-[#0A0A0C] text-white border-t border-white/5">
+      <div className="max-w-5xl mx-auto px-5 sm:px-8">
+        <div className="text-center mb-8 md:mb-16">
           <div className="inline-flex items-center space-x-1.5 md:space-x-2 px-2.5 py-1 md:px-3 md:py-1 rounded-full glass-panel border border-white/10 mb-2.5 md:mb-4">
             <Sliders className="w-3 h-3 md:w-3.5 md:h-3.5 text-accent-cyan" />
             <span className="text-[10px] md:text-[11px] uppercase tracking-wider md:tracking-[0.2em] text-white/70 font-mono">

@@ -41,7 +41,7 @@ export default function Navbar({ onPreOrderClick }: NavbarProps) {
             : 'bg-transparent py-3 md:py-5 border-b border-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between">
           {/* Left: Sony Logo + Product Name */}
           <div className="flex items-center space-x-2 md:space-x-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <span className="font-semibold tracking-[0.2em] text-[11px] md:text-xs uppercase text-white/90 group-hover:text-white transition-colors">
