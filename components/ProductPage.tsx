@@ -11,11 +11,22 @@ import PreOrderModal from './PreOrderModal';
 import Footer from './Footer';
 
 interface ProductPageProps {
-  frames: string[];
-  frameCount: number;
+  desktopCount?: number;
+  desktopBasePath?: string;
+  mobileCount?: number;
+  mobileBasePath?: string;
+  frames?: string[];
+  frameCount?: number;
 }
 
-export default function ProductPage({ frames, frameCount }: ProductPageProps) {
+export default function ProductPage({
+  desktopCount,
+  desktopBasePath,
+  mobileCount,
+  mobileBasePath,
+  frames,
+  frameCount,
+}: ProductPageProps) {
   const [isPreOrderOpen, setIsPreOrderOpen] = useState(false);
   const [preOrderColor, setPreOrderColor] = useState('Matte Obsidian Black');
 
@@ -34,6 +45,10 @@ export default function ProductPage({ frames, frameCount }: ProductPageProps) {
 
       {/* Main sticky canvas scrollytelling image sequence */}
       <CanvasSequence
+        desktopCount={desktopCount}
+        desktopBasePath={desktopBasePath}
+        mobileCount={mobileCount}
+        mobileBasePath={mobileBasePath}
         initialFrames={frames}
         frameCount={frameCount}
         onPreOrderClick={() => handleOpenPreOrder()}

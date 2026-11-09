@@ -4,25 +4,44 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { ArrowDown, Loader2, Sparkles, ChevronDown } from 'lucide-react';
 import { getAssetPath } from '@/lib/basePath';
 
+const MOBILE_ZOOM = 1.25;
+const LERP_FACTOR = 0.2; // Easing factor between 0.15 and 0.25
+
+const isMobileScreen = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return window.innerWidth < 768 || window.innerHeight > window.innerWidth;
+};
+
 interface CanvasSequenceProps {
-  initialFrames: string[];
-  frameCount: number;
+  desktopCount?: number;
+  desktopBasePath?: string;
+  mobileCount?: number;
+  mobileBasePath?: string;
+  initialFrames?: string[];
+  frameCount?: number;
   onPreOrderClick?: () => void;
 }
 
 export default function CanvasSequence({
+  desktopCount,
+  desktopBasePath = '/frames',
+  mobileCount,
+  mobileBasePath = '/frames-mobile',
   initialFrames,
   frameCount,
   onPreOrderClick,
 }: CanvasSequenceProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
+
   // Images cache
   const imagesRef = useRef<HTMLImageElement[]>([]);
+  const currentSetRef = useRef<'mobile' | 'desktop'>('desktop');
   const currentIndexRef = useRef<number>(0);
+  const currentFrameFloatRef = useRef<number>(0);
   const targetFrameRef = useRef<number>(0);
   const rafIdRef = useRef<number | null>(null);
+  const cancelLoadRef = useRef<(() => void) | null>(null);
 
   // Loading state
   const [loadedCount, setLoadedCount] = useState<number>(0);
@@ -30,8 +49,11 @@ export default function CanvasSequence({
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [bgMatchedColor, setBgMatchedColor] = useState<string>('#050505');
 
-  // Total frames count
-  const totalFrames = frameCount || initialFrames.length || 0;
+  // Total frames for active set
+  const [totalFrames, setTotalFrames] = useState<number>(() => {
+    return desktopCount || mobileCount || frameCount || initialFrames?.length || 0;
+  });
+  const totalFramesRef = useRef<number>(totalFrames);
 
   // Eyedrop exact background color from the first loaded frame
   const sampleFrameBackground = useCallback((img: HTMLImageElement) => {
@@ -52,7 +74,7 @@ export default function CanvasSequence({
     }
   }, []);
 
-  // Draw specific frame index onto canvas with cover scaling and devicePixelRatio
+  // Draw specific frame index onto canvas
   const renderFrame = useCallback((index: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -62,7 +84,7 @@ export default function CanvasSequence({
     const img = imagesRef.current[index];
     if (!img || !img.complete || img.naturalWidth === 0) return;
 
-    // Ensure high quality smoothing
+    // High quality smoothing
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
@@ -70,34 +92,48 @@ export default function CanvasSequence({
     const ch = canvas.height;
     const iw = img.naturalWidth;
     const ih = img.naturalHeight;
-
-    // Cover scaling calculation
     const imgRatio = iw / ih;
-    const canvasRatio = cw / ch;
+
+    const isMobile = isMobileScreen();
 
     let drawWidth: number;
     let drawHeight: number;
     let offsetX: number;
     let offsetY: number;
 
-    if (canvasRatio > imgRatio) {
-      drawWidth = cw;
-      drawHeight = cw / imgRatio;
-      offsetX = 0;
+    if (isMobile) {
+      // On mobile & portrait: fill canvas with #050505, scale to fit screen width with MOBILE_ZOOM,
+      // and center horizontally and vertically
+      ctx.fillStyle = '#050505';
+      ctx.fillRect(0, 0, cw, ch);
+
+      drawWidth = cw * MOBILE_ZOOM;
+      drawHeight = drawWidth / imgRatio;
+      offsetX = (cw - drawWidth) / 2;
       offsetY = (ch - drawHeight) / 2;
     } else {
-      drawHeight = ch;
-      drawWidth = ch * imgRatio;
-      offsetX = (cw - drawWidth) / 2;
-      offsetY = 0;
+      // On desktop and landscape: cover scaling
+      const canvasRatio = cw / ch;
+
+      if (canvasRatio > imgRatio) {
+        drawWidth = cw;
+        drawHeight = cw / imgRatio;
+        offsetX = 0;
+        offsetY = (ch - drawHeight) / 2;
+      } else {
+        drawHeight = ch;
+        drawWidth = ch * imgRatio;
+        offsetX = (cw - drawWidth) / 2;
+        offsetY = 0;
+      }
     }
 
-    // Do NOT clear before drawing! Drawing directly over eliminates any flicker or blinking.
+    // Never clear canvas before the next frame is ready - draw directly
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     currentIndexRef.current = index;
   }, []);
 
-  // Resize canvas to match window dimensions multiplied by devicePixelRatio
+  // Resize canvas to match window dimensions multiplied by devicePixelRatio (capped at 2 on mobile & desktop)
   const handleResize = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -120,101 +156,222 @@ export default function CanvasSequence({
     }
   }, [renderFrame]);
 
-  // Preload frames in batches and start experience once first 20% are loaded
+  // Load a single frame set (mobile or desktop). Never load both.
+  const loadFrameSet = useCallback(
+    (setType: 'mobile' | 'desktop', isInitial: boolean) => {
+      // Cancel any ongoing batch
+      if (cancelLoadRef.current) {
+        cancelLoadRef.current();
+        cancelLoadRef.current = null;
+      }
+
+      let isCancelled = false;
+      cancelLoadRef.current = () => {
+        isCancelled = true;
+      };
+
+      const targetCount =
+        setType === 'mobile'
+          ? mobileCount || desktopCount || frameCount || initialFrames?.length || 0
+          : desktopCount || mobileCount || frameCount || initialFrames?.length || 0;
+
+      const basePath =
+        setType === 'mobile'
+          ? mobileBasePath || '/frames-mobile'
+          : desktopBasePath || '/frames';
+
+      totalFramesRef.current = targetCount;
+      setTotalFrames(targetCount);
+
+      if (targetCount === 0) {
+        if (isInitial) setIsLoaded(true);
+        return;
+      }
+
+      const images: HTMLImageElement[] = [];
+      for (let i = 0; i < targetCount; i++) {
+        images.push(new Image());
+      }
+
+      if (isInitial) {
+        imagesRef.current = images;
+        currentSetRef.current = setType;
+      }
+
+      let count = 0;
+      let hasStarted = false;
+      const readyThreshold = Math.max(1, Math.ceil(targetCount * 0.2));
+
+      const checkReady = () => {
+        if (!hasStarted && (count >= readyThreshold || count === targetCount)) {
+          hasStarted = true;
+          if (isInitial) {
+            setIsLoaded(true);
+            handleResize();
+            renderFrame(0);
+          }
+        }
+      };
+
+      const loadSingleFrame = (index: number) => {
+        if (isCancelled || index >= targetCount) return;
+        const img = images[index];
+        const filename = `frame_${String(index + 1).padStart(4, '0')}.webp`;
+        img.src = getAssetPath(`${basePath}/${filename}`);
+
+        img.onload = () => {
+          if (isCancelled) return;
+          count++;
+          if (isInitial) {
+            setLoadedCount(count);
+          }
+
+          if (index === 0 && isInitial) {
+            sampleFrameBackground(img);
+            handleResize();
+            renderFrame(0);
+          }
+
+          checkReady();
+
+          // If switching set after resize, swap once the active frame is ready to avoid blank flash
+          if (!isInitial && currentSetRef.current !== setType) {
+            const desiredFrame = Math.min(targetCount - 1, currentIndexRef.current);
+            if (images[desiredFrame]?.complete && images[desiredFrame]?.naturalWidth > 0) {
+              imagesRef.current = images;
+              currentSetRef.current = setType;
+              handleResize();
+              renderFrame(desiredFrame);
+            }
+          } else if (
+            index === currentIndexRef.current ||
+            index === Math.round(targetFrameRef.current)
+          ) {
+            renderFrame(index);
+          }
+        };
+
+        img.onerror = () => {
+          if (isCancelled) return;
+          count++;
+          if (isInitial) {
+            setLoadedCount(count);
+          }
+          checkReady();
+        };
+      };
+
+      // Load in small batches so devices aren't asked to decode everything at once
+      const batchSize = setType === 'mobile' ? 6 : 10;
+      const batchDelay = setType === 'mobile' ? 35 : 20;
+      let currentBatchStart = 0;
+
+      // Prioritize loading current frame index if switching sets
+      if (!isInitial && currentIndexRef.current > 0 && currentIndexRef.current < targetCount) {
+        loadSingleFrame(currentIndexRef.current);
+      }
+
+      const pumpBatch = () => {
+        if (isCancelled) return;
+        const end = Math.min(currentBatchStart + batchSize, targetCount);
+        for (let i = currentBatchStart; i < end; i++) {
+          loadSingleFrame(i);
+        }
+        currentBatchStart = end;
+        if (currentBatchStart < targetCount && !isCancelled) {
+          setTimeout(pumpBatch, batchDelay);
+        }
+      };
+
+      pumpBatch();
+    },
+    [
+      desktopCount,
+      desktopBasePath,
+      mobileCount,
+      mobileBasePath,
+      frameCount,
+      initialFrames,
+      sampleFrameBackground,
+      handleResize,
+      renderFrame,
+    ]
+  );
+
+  // Initial load: choose mobile set when window.innerWidth < 768 or portrait, otherwise desktop set
   useEffect(() => {
-    let isCancelled = false;
-    let count = 0;
-    let hasStarted = false;
-    const images: HTMLImageElement[] = [];
-
-    // Pre-allocate array
-    for (let i = 0; i < totalFrames; i++) {
-      images.push(new Image());
-    }
-    imagesRef.current = images;
-
-    // Start experience once 20% of frames are loaded
-    const readyThreshold = totalFrames > 0 ? Math.max(1, Math.ceil(totalFrames * 0.2)) : 0;
-
-    const checkReady = () => {
-      if (!hasStarted && (count >= readyThreshold || count === totalFrames)) {
-        hasStarted = true;
-        setIsLoaded(true);
-        handleResize();
-        renderFrame(0);
-      }
-    };
-
-    if (totalFrames === 0) {
-      checkReady();
-      return;
-    }
-
-    const loadFrame = (index: number) => {
-      if (isCancelled || index >= totalFrames) return;
-      const img = images[index];
-      const frameUrl =
-        initialFrames[index] ||
-        getAssetPath(`/frames/frame_${String(index + 1).padStart(4, '0')}.webp`);
-
-      img.src = frameUrl;
-      img.onload = () => {
-        if (isCancelled) return;
-        count++;
-        setLoadedCount(count);
-
-        if (index === 0) {
-          sampleFrameBackground(img);
-          // Initial draw of frame 0
-          handleResize();
-          renderFrame(0);
-        }
-
-        checkReady();
-
-        if (index === targetFrameRef.current) {
-          renderFrame(index);
-        }
-      };
-
-      img.onerror = () => {
-        if (isCancelled) return;
-        count++;
-        setLoadedCount(count);
-        checkReady();
-      };
-    };
-
-    // Concurrently load frames in batches for faster ready state
-    const batchSize = 12;
-    let currentBatchStart = 0;
-
-    const pumpBatch = () => {
-      const end = Math.min(currentBatchStart + batchSize, totalFrames);
-      for (let i = currentBatchStart; i < end; i++) {
-        loadFrame(i);
-      }
-      currentBatchStart = end;
-      if (currentBatchStart < totalFrames && !isCancelled) {
-        setTimeout(pumpBatch, 20);
-      }
-    };
-
-    pumpBatch();
+    const isMobile = isMobileScreen();
+    const initialSet = isMobile ? 'mobile' : 'desktop';
+    loadFrameSet(initialSet, true);
 
     return () => {
-      isCancelled = true;
+      if (cancelLoadRef.current) {
+        cancelLoadRef.current();
+        cancelLoadRef.current = null;
+      }
     };
-  }, [totalFrames, initialFrames, sampleFrameBackground, handleResize, renderFrame]);
+  }, [loadFrameSet]);
 
-  // Window resize listener
+  // Handle window resize and orientation change
   useEffect(() => {
-    window.addEventListener('resize', handleResize, { passive: true });
-    handleResize();
-    return () => window.removeEventListener('resize', handleResize);
-  }, [handleResize]);
+    const handleResizeOrOrientation = () => {
+      handleResize();
 
-  // Scroll listener mapped to frame playback
+      const isMobile = isMobileScreen();
+      const expectedSet = isMobile ? 'mobile' : 'desktop';
+
+      if (expectedSet !== currentSetRef.current) {
+        loadFrameSet(expectedSet, false);
+      }
+    };
+
+    window.addEventListener('resize', handleResizeOrOrientation, { passive: true });
+    window.addEventListener('orientationchange', handleResizeOrOrientation, { passive: true });
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResizeOrOrientation);
+      window.removeEventListener('orientationchange', handleResizeOrOrientation);
+    };
+  }, [handleResize, loadFrameSet]);
+
+  // Smooth scroll-to-frame easing loop (lerp factor between 0.15 and 0.25)
+  const updateFrame = useCallback(() => {
+    const total = totalFramesRef.current;
+    if (total <= 0) return;
+
+    const target = targetFrameRef.current;
+    const current = currentFrameFloatRef.current;
+    const diff = target - current;
+
+    if (Math.abs(diff) > 0.01) {
+      currentFrameFloatRef.current = current + diff * LERP_FACTOR;
+      const frameToRender = Math.min(
+        total - 1,
+        Math.max(0, Math.round(currentFrameFloatRef.current))
+      );
+
+      if (frameToRender !== currentIndexRef.current) {
+        renderFrame(frameToRender);
+      }
+
+      rafIdRef.current = requestAnimationFrame(updateFrame);
+    } else {
+      currentFrameFloatRef.current = target;
+      const frameToRender = Math.min(
+        total - 1,
+        Math.max(0, Math.round(target))
+      );
+
+      if (frameToRender !== currentIndexRef.current) {
+        renderFrame(frameToRender);
+      }
+
+      rafIdRef.current = null;
+    }
+  }, [renderFrame]);
+
+  // Scroll listener mapped to frame playback with lerp smoothing
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
@@ -229,23 +386,15 @@ export default function CanvasSequence({
 
       setScrollProgress(progress);
 
-      if (rafIdRef.current) {
-        cancelAnimationFrame(rafIdRef.current);
+      const total = totalFramesRef.current;
+      if (total <= 0) return;
+
+      // Target frame reaches total - 1 at 100% scroll
+      targetFrameRef.current = progress * (total - 1);
+
+      if (!rafIdRef.current) {
+        rafIdRef.current = requestAnimationFrame(updateFrame);
       }
-
-      rafIdRef.current = requestAnimationFrame(() => {
-        // Map 0 -> 1 progress to 0 -> (totalFrames - 1)
-        const targetFrame = Math.min(
-          totalFrames - 1,
-          Math.max(0, Math.floor(progress * (totalFrames - 1)))
-        );
-
-        targetFrameRef.current = targetFrame;
-
-        if (targetFrame !== currentIndexRef.current) {
-          renderFrame(targetFrame);
-        }
-      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -253,9 +402,12 @@ export default function CanvasSequence({
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
     };
-  }, [totalFrames, renderFrame]);
+  }, [updateFrame]);
 
   // Helper for storytelling beat opacity/transforms
   const getBeatStyle = (start: number, peakStart: number, peakEnd: number, end: number) => {

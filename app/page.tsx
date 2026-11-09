@@ -6,25 +6,29 @@ import { getAssetPath } from '@/lib/basePath';
 export const dynamic = 'force-static';
 
 function getFramesData() {
-  const framesDir = path.join(process.cwd(), 'public', 'frames');
-  
-  if (!fs.existsSync(framesDir)) {
-    return { frameCount: 0, frames: [] };
-  }
+  const countFrames = (dir: string) => {
+    if (!fs.existsSync(dir)) return 0;
+    return fs
+      .readdirSync(dir)
+      .filter((file) => /^frame_\d+\.webp$/i.test(file)).length;
+  };
 
-  const files = fs.readdirSync(framesDir);
-  const frameFiles = files
-    .filter((file) => /^frame_\d+\.webp$/i.test(file))
-    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  const desktopDir = path.join(process.cwd(), 'public', 'frames');
+  const mobileDir = path.join(process.cwd(), 'public', 'frames-mobile');
+
+  const desktopCount = countFrames(desktopDir);
+  const mobileCount = countFrames(mobileDir);
 
   return {
-    frameCount: frameFiles.length,
-    frames: frameFiles.map((file) => getAssetPath(`/frames/${file}`)),
+    desktopCount,
+    desktopBasePath: getAssetPath('/frames'),
+    mobileCount,
+    mobileBasePath: getAssetPath('/frames-mobile'),
   };
 }
 
 export default function Home() {
-  const { frames, frameCount } = getFramesData();
+  const framesData = getFramesData();
 
-  return <ProductPage frames={frames} frameCount={frameCount} />;
+  return <ProductPage {...framesData} />;
 }
