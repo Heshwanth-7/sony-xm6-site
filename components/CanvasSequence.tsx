@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { ArrowDown, Loader2, Sparkles, ChevronDown } from 'lucide-react';
 import { getAssetPath } from '@/lib/basePath';
 
-const MOBILE_ZOOM = 1.25;
+const MOBILE_ZOOM = 1.0;
 const LERP_FACTOR = 0.2; // Easing factor between 0.15 and 0.25
 
 const isMobileScreen = (): boolean => {
@@ -48,6 +48,7 @@ export default function CanvasSequence({
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [bgMatchedColor, setBgMatchedColor] = useState<string>('#050505');
+  const [mobileTextTop, setMobileTextTop] = useState<number | null>(null);
 
   // Total frames for active set
   const [totalFrames, setTotalFrames] = useState<number>(() => {
@@ -102,7 +103,7 @@ export default function CanvasSequence({
     let offsetY: number;
 
     if (isMobile) {
-      // On mobile & portrait: fill canvas with #050505, scale to fit screen width with MOBILE_ZOOM
+      // On mobile & portrait: fill canvas with #050505, scale to fit screen width with MOBILE_ZOOM = 1.0
       ctx.fillStyle = '#050505';
       ctx.fillRect(0, 0, cw, ch);
 
@@ -110,12 +111,17 @@ export default function CanvasSequence({
       drawHeight = drawWidth / imgRatio;
       offsetX = (cw - drawWidth) / 2;
 
-      // Vertically center strictly inside the IMAGE ZONE (top 48% under the navbar)
+      // Vertically center the combined block (image, then text card) in viewport below navbar
       const dpr = cw / (canvas.clientWidth || window.innerWidth || 1);
       const navHeight = 48 * dpr;
-      const imageZoneBottom = ch * 0.48;
-      const availableHeight = Math.max(0, imageZoneBottom - navHeight);
-      offsetY = navHeight + (availableHeight - drawHeight) / 2;
+      const displayH = ch;
+      const availableH = Math.max(0, displayH - navHeight);
+      const cardH = 175 * dpr; // approximate compact card height on mobile
+      const gap = 20 * dpr; // clean gap between image and text card
+      const combinedH = drawHeight + gap + cardH;
+      const spaceAbove = Math.max(12 * dpr, (availableH - combinedH) / 2);
+
+      offsetY = navHeight + spaceAbove;
     } else {
       // On desktop and landscape: cover scaling
       const canvasRatio = cw / ch;
@@ -153,6 +159,20 @@ export default function CanvasSequence({
     if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
       canvas.width = targetWidth;
       canvas.height = targetHeight;
+    }
+
+    if (isMobileScreen()) {
+      const navH = 48;
+      const availH = Math.max(0, displayHeight - navH);
+      const dH = (displayWidth * MOBILE_ZOOM) / (16 / 9);
+      const cH = 175;
+      const g = 20;
+      const combH = dH + g + cH;
+      const spAbove = Math.max(12, (availH - combH) / 2);
+      const textTop = navH + spAbove + dH + g;
+      setMobileTextTop(Math.round(textTop));
+    } else {
+      setMobileTextTop(null);
     }
 
     // Redraw current frame immediately after resize
@@ -523,8 +543,11 @@ export default function CanvasSequence({
 
         {/* BEAT 1: HERO / INTRO (0% - 15% scroll) */}
         <div
-          className="absolute inset-x-0 top-[48%] bottom-0 md:inset-0 flex flex-col items-center justify-start md:justify-center pt-2 sm:pt-4 md:pt-0 px-4 sm:px-6 md:px-6 z-20"
-          style={getBeatStyle(0, 0, 0.10, 0.16)}
+          className="absolute inset-x-0 top-[56%] bottom-0 md:inset-0 flex flex-col items-center justify-start md:justify-center pt-1 md:pt-0 px-4 sm:px-6 md:px-6 z-20"
+          style={{
+            ...getBeatStyle(0, 0, 0.10, 0.16),
+            ...(mobileTextTop ? { top: `${mobileTextTop}px` } : {}),
+          }}
         >
           <div className="w-full max-w-[360px] md:max-w-4xl mx-auto flex flex-col items-center text-center p-3 sm:p-4 md:p-0 rounded-xl md:rounded-none bg-black/50 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none border border-white/5 md:border-transparent">
             <div className="inline-flex items-center space-x-1.5 md:space-x-2 px-2 py-0.5 md:px-3 md:py-1 rounded-full glass-panel border border-white/10 mb-2 md:mb-6 shadow-2xl">
@@ -558,8 +581,11 @@ export default function CanvasSequence({
 
         {/* BEAT 2: ENGINEERING REVEAL (15% - 40% scroll) */}
         <div
-          className="absolute inset-x-0 top-[48%] bottom-0 md:inset-0 flex flex-col items-center md:items-center justify-start md:justify-start pt-2 sm:pt-4 md:pt-0 px-4 sm:px-5 md:px-16 md:lg:px-24 z-20 pointer-events-none"
-          style={getBeatStyle(0.16, 0.22, 0.34, 0.40)}
+          className="absolute inset-x-0 top-[56%] bottom-0 md:inset-0 flex flex-col items-center md:items-center justify-start md:justify-start pt-1 md:pt-0 px-4 sm:px-5 md:px-16 md:lg:px-24 z-20 pointer-events-none"
+          style={{
+            ...getBeatStyle(0.16, 0.22, 0.34, 0.40),
+            ...(mobileTextTop ? { top: `${mobileTextTop}px` } : {}),
+          }}
         >
           <div className="w-full max-w-[360px] md:max-w-xl text-left pointer-events-auto p-3 sm:p-4 md:p-0 rounded-xl md:rounded-none bg-black/50 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none border border-white/5 md:border-transparent">
             <div className="text-[10px] md:text-xs font-mono tracking-wider md:tracking-widest text-accent-cyan uppercase mb-1.5 md:mb-3 flex items-center space-x-2">
@@ -597,8 +623,11 @@ export default function CanvasSequence({
 
         {/* BEAT 3: NOISE CANCELLING & MICROPHONES (40% - 65% scroll) */}
         <div
-          className="absolute inset-x-0 top-[48%] bottom-0 md:inset-0 flex flex-col items-center md:items-center justify-start md:justify-end pt-2 sm:pt-4 md:pb-0 px-4 sm:px-5 md:px-16 md:lg:px-24 z-20 pointer-events-none"
-          style={getBeatStyle(0.40, 0.46, 0.58, 0.65)}
+          className="absolute inset-x-0 top-[56%] bottom-0 md:inset-0 flex flex-col items-center md:items-center justify-start md:justify-end pt-1 md:pb-0 px-4 sm:px-5 md:px-16 md:lg:px-24 z-20 pointer-events-none"
+          style={{
+            ...getBeatStyle(0.40, 0.46, 0.58, 0.65),
+            ...(mobileTextTop ? { top: `${mobileTextTop}px` } : {}),
+          }}
         >
           <div className="w-full max-w-[360px] md:max-w-xl text-left md:text-right pointer-events-auto p-3 sm:p-4 md:p-0 rounded-xl md:rounded-none bg-black/50 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none border border-white/5 md:border-transparent">
             <div className="text-[10px] md:text-xs font-mono tracking-wider md:tracking-widest text-accent-cyan uppercase mb-1.5 md:mb-3 flex items-center justify-start md:justify-end space-x-2">
@@ -636,8 +665,11 @@ export default function CanvasSequence({
 
         {/* BEAT 4: SOUND & UPSCALING (65% - 85% scroll) */}
         <div
-          className="absolute inset-x-0 top-[48%] bottom-0 md:inset-0 flex flex-col items-center md:items-center justify-start md:justify-start pt-2 sm:pt-4 md:pt-0 px-4 sm:px-5 md:px-16 md:lg:px-24 z-20 pointer-events-none"
-          style={getBeatStyle(0.65, 0.70, 0.80, 0.85)}
+          className="absolute inset-x-0 top-[56%] bottom-0 md:inset-0 flex flex-col items-center md:items-center justify-start md:justify-start pt-1 md:pt-0 px-4 sm:px-5 md:px-16 md:lg:px-24 z-20 pointer-events-none"
+          style={{
+            ...getBeatStyle(0.65, 0.70, 0.80, 0.85),
+            ...(mobileTextTop ? { top: `${mobileTextTop}px` } : {}),
+          }}
         >
           <div className="w-full max-w-[360px] md:max-w-xl text-left pointer-events-auto p-3 sm:p-4 md:p-0 rounded-xl md:rounded-none bg-black/50 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none border border-white/5 md:border-transparent">
             <div className="text-[10px] md:text-xs font-mono tracking-wider md:tracking-widest text-accent-cyan uppercase mb-1.5 md:mb-3 flex items-center space-x-2">
@@ -677,8 +709,11 @@ export default function CanvasSequence({
 
         {/* BEAT 5: REASSEMBLY & CTA (85% - 100% scroll) */}
         <div
-          className="absolute inset-x-0 top-[48%] bottom-0 md:inset-0 flex flex-col items-center justify-start md:justify-center pt-2 sm:pt-4 md:pt-0 px-4 sm:px-6 md:px-6 z-20"
-          style={getBeatStyle(0.85, 0.90, 1.0, 1.0)}
+          className="absolute inset-x-0 top-[56%] bottom-0 md:inset-0 flex flex-col items-center justify-start md:justify-center pt-1 md:pt-0 px-4 sm:px-6 md:px-6 z-20"
+          style={{
+            ...getBeatStyle(0.85, 0.90, 1.0, 1.0),
+            ...(mobileTextTop ? { top: `${mobileTextTop}px` } : {}),
+          }}
         >
           <div className="w-full max-w-[360px] md:max-w-3xl mx-auto flex flex-col items-center text-center p-3 sm:p-4 md:p-0 rounded-xl md:rounded-none bg-black/50 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none border border-white/5 md:border-transparent">
             <div className="text-[10px] md:text-xs font-mono tracking-wider md:tracking-widest text-accent-cyan uppercase mb-1 md:mb-4">
