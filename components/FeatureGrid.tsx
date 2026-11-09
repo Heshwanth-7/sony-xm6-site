@@ -5,158 +5,158 @@ import { Cpu, BatteryCharging, Mic, ShieldCheck, Zap, Headphones, Compass, Spark
 
 export default function FeatureGrid() {
   return (
-    <section id="technology" className="relative py-32 bg-[#050505] text-white overflow-hidden border-t border-white/5">
+    <section id="technology" className="relative py-16 md:py-32 bg-[#050505] text-white overflow-hidden border-t border-white/5">
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] radial-hero-glow pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
         {/* Section Heading */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full glass-panel border border-white/10 mb-4">
-            <Sparkles className="w-3.5 h-3.5 text-accent-cyan" />
-            <span className="text-[11px] uppercase tracking-[0.2em] text-white/70 font-mono">
+        <div className="text-center max-w-3xl mx-auto mb-10 md:mb-20">
+          <div className="inline-flex items-center space-x-1.5 md:space-x-2 px-2.5 py-1 md:px-3 md:py-1 rounded-full glass-panel border border-white/10 mb-2.5 md:mb-4">
+            <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5 text-accent-cyan" />
+            <span className="text-[10px] md:text-[11px] uppercase tracking-wider md:tracking-[0.2em] text-white/70 font-mono">
               Engineering Feats
             </span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-gradient-white mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight text-gradient-white mb-3 md:mb-6 leading-tight">
             Pioneered to redefine acoustic limits.
           </h2>
-          <p className="text-base sm:text-lg text-white/60 leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-lg text-white/70 leading-relaxed max-w-xl mx-auto">
             Every millimeter of the WH-1000XM6 is engineered with uncompromising precision. From the custom carbon-bio acoustic chamber to the dual-chip neural processing unit.
           </p>
         </div>
 
         {/* Bento Box Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
           {/* Card 1: Dual Processor (Large 2-col) */}
-          <div className="md:col-span-2 glass-panel p-8 rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
+          <div className="md:col-span-2 glass-panel p-5 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
             <div className="absolute top-0 right-0 w-64 h-64 bg-accent-blue/10 rounded-full blur-3xl pointer-events-none group-hover:bg-accent-blue/20 transition-all" />
-            <div className="p-3 bg-white/5 w-fit rounded-2xl mb-6 text-accent-cyan">
-              <Cpu className="w-6 h-6" />
+            <div className="p-2.5 md:p-3 bg-white/5 w-fit rounded-xl md:rounded-2xl mb-4 md:mb-6 text-accent-cyan">
+              <Cpu className="w-5 h-5 md:w-6 md:h-6" />
             </div>
-            <span className="text-xs font-mono text-accent-cyan uppercase tracking-widest">
+            <span className="text-[10px] md:text-xs font-mono text-accent-cyan uppercase tracking-wider md:tracking-widest">
               Neural Processing Architecture
             </span>
-            <h3 className="text-2xl font-bold text-white mt-2 mb-4">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mt-1.5 md:mt-2 mb-2 md:mb-4 leading-tight">
               Integrated Processor V3 & HD QN3 Chipset
             </h3>
-            <p className="text-sm text-white/60 leading-relaxed mb-6">
+            <p className="text-xs sm:text-sm text-white/60 leading-relaxed mb-4 md:mb-6">
               Co-developed with Sony's Tokyo semiconductor laboratories, two dedicated processors work in parallel to compute 700,000 anti-noise inverse waveforms per second, creating unprecedented acoustic silence.
             </p>
-            <div className="flex items-center space-x-6 pt-4 border-t border-white/5 font-mono text-xs">
+            <div className="flex items-center space-x-4 md:space-x-6 pt-3 md:pt-4 border-t border-white/5 font-mono text-xs">
               <div>
-                <div className="text-white font-semibold text-base">0.18ms</div>
-                <div className="text-white/40">Latency response</div>
+                <div className="text-white font-semibold text-sm md:text-base">0.18ms</div>
+                <div className="text-white/40 text-[10px] md:text-xs">Latency response</div>
               </div>
               <div>
-                <div className="text-white font-semibold text-base">-42dB</div>
-                <div className="text-white/40">Peak attenuation</div>
+                <div className="text-white font-semibold text-sm md:text-base">-42dB</div>
+                <div className="text-white/40 text-[10px] md:text-xs">Peak attenuation</div>
               </div>
               <div>
-                <div className="text-white font-semibold text-base">8x</div>
-                <div className="text-white/40">Faster AI adaptation</div>
+                <div className="text-white font-semibold text-sm md:text-base">8x</div>
+                <div className="text-white/40 text-[10px] md:text-xs">Faster AI adaptation</div>
               </div>
             </div>
           </div>
 
           {/* Card 2: 45-Hour Battery */}
-          <div className="glass-panel p-8 rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500 flex flex-col justify-between">
+          <div className="glass-panel p-5 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500 flex flex-col justify-between">
             <div>
-              <div className="p-3 bg-white/5 w-fit rounded-2xl mb-6 text-accent-cyan">
-                <BatteryCharging className="w-6 h-6" />
+              <div className="p-2.5 md:p-3 bg-white/5 w-fit rounded-xl md:rounded-2xl mb-4 md:mb-6 text-accent-cyan">
+                <BatteryCharging className="w-5 h-5 md:w-6 md:h-6" />
               </div>
-              <span className="text-xs font-mono text-accent-cyan uppercase tracking-widest">
+              <span className="text-[10px] md:text-xs font-mono text-accent-cyan uppercase tracking-wider md:tracking-widest">
                 Power Density
               </span>
-              <h3 className="text-2xl font-bold text-white mt-2 mb-3">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mt-1.5 md:mt-2 mb-2 md:mb-3 leading-tight">
                 45 Hours Playback
               </h3>
-              <p className="text-sm text-white/60 leading-relaxed">
+              <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
                 High-density solid-electrolyte cell delivers nearly two full days of non-stop continuous ANC playback.
               </p>
             </div>
-            <div className="mt-8 pt-4 border-t border-white/5">
-              <div className="text-xs text-white/50 font-mono">Quick Charge</div>
-              <div className="text-white font-semibold text-sm mt-0.5">3 min charge = 5 hrs audio</div>
+            <div className="mt-6 md:mt-8 pt-3 md:pt-4 border-t border-white/5">
+              <div className="text-[11px] md:text-xs text-white/50 font-mono">Quick Charge</div>
+              <div className="text-white font-semibold text-xs md:text-sm mt-0.5">3 min charge = 5 hrs audio</div>
             </div>
           </div>
 
           {/* Card 3: Beamforming 8-Mic Array */}
-          <div className="glass-panel p-8 rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500 flex flex-col justify-between">
+          <div className="glass-panel p-5 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500 flex flex-col justify-between">
             <div>
-              <div className="p-3 bg-white/5 w-fit rounded-2xl mb-6 text-accent-cyan">
-                <Mic className="w-6 h-6" />
+              <div className="p-2.5 md:p-3 bg-white/5 w-fit rounded-xl md:rounded-2xl mb-4 md:mb-6 text-accent-cyan">
+                <Mic className="w-5 h-5 md:w-6 md:h-6" />
               </div>
-              <span className="text-xs font-mono text-accent-cyan uppercase tracking-widest">
+              <span className="text-[10px] md:text-xs font-mono text-accent-cyan uppercase tracking-wider md:tracking-widest">
                 Acoustic Pickup
               </span>
-              <h3 className="text-2xl font-bold text-white mt-2 mb-3">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mt-1.5 md:mt-2 mb-2 md:mb-3 leading-tight">
                 8-Mic Beamforming
               </h3>
-              <p className="text-sm text-white/60 leading-relaxed">
+              <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
                 Micro-mesh wind shielding and bone-conduction voice calibration isolate your vocals even in gale-force winds.
               </p>
             </div>
-            <div className="mt-8 pt-4 border-t border-white/5">
-              <div className="text-xs text-white/50 font-mono">Wind Noise Reduction</div>
-              <div className="text-white font-semibold text-sm mt-0.5">Up to 45 km/h rejection</div>
+            <div className="mt-6 md:mt-8 pt-3 md:pt-4 border-t border-white/5">
+              <div className="text-[11px] md:text-xs text-white/50 font-mono">Wind Noise Reduction</div>
+              <div className="text-white font-semibold text-xs md:text-sm mt-0.5">Up to 45 km/h rejection</div>
             </div>
           </div>
 
           {/* Card 4: 40mm Carbon-Bio Transducer */}
-          <div className="glass-panel p-8 rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
-            <div className="p-3 bg-white/5 w-fit rounded-2xl mb-6 text-accent-cyan">
-              <Headphones className="w-6 h-6" />
+          <div className="glass-panel p-5 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
+            <div className="p-2.5 md:p-3 bg-white/5 w-fit rounded-xl md:rounded-2xl mb-4 md:mb-6 text-accent-cyan">
+              <Headphones className="w-5 h-5 md:w-6 md:h-6" />
             </div>
-            <span className="text-xs font-mono text-accent-cyan uppercase tracking-widest">
+            <span className="text-[10px] md:text-xs font-mono text-accent-cyan uppercase tracking-wider md:tracking-widest">
               Audio Drivers
             </span>
-            <h3 className="text-2xl font-bold text-white mt-2 mb-3">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mt-1.5 md:mt-2 mb-2 md:mb-3 leading-tight">
               40mm Carbon-Bio
             </h3>
-            <p className="text-sm text-white/60 leading-relaxed">
+            <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
               Ultra-light carbon fiber dome paired with bio-cellulose surround provides lightning-fast transient response and bass authority down to 3Hz.
             </p>
           </div>
 
           {/* Card 5: Spatial Head Tracking (2-col) */}
-          <div className="md:col-span-2 glass-panel p-8 rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
-            <div className="p-3 bg-white/5 w-fit rounded-2xl mb-6 text-accent-cyan">
-              <Compass className="w-6 h-6" />
+          <div className="md:col-span-2 glass-panel p-5 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
+            <div className="p-2.5 md:p-3 bg-white/5 w-fit rounded-xl md:rounded-2xl mb-4 md:mb-6 text-accent-cyan">
+              <Compass className="w-5 h-5 md:w-6 md:h-6" />
             </div>
-            <span className="text-xs font-mono text-accent-cyan uppercase tracking-widest">
+            <span className="text-[10px] md:text-xs font-mono text-accent-cyan uppercase tracking-wider md:tracking-widest">
               Spatial Immersion
             </span>
-            <h3 className="text-2xl font-bold text-white mt-2 mb-3">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mt-1.5 md:mt-2 mb-2 md:mb-3 leading-tight">
               360 Reality Audio & Dynamic Head Tracking
             </h3>
-            <p className="text-sm text-white/60 leading-relaxed mb-6">
+            <p className="text-xs sm:text-sm text-white/60 leading-relaxed mb-4 md:mb-6">
               Precision 6-axis gyroscope and accelerometer sense microscopic head movements in real time, anchoring musical instruments and cinematic dialogues firmly in 3D acoustic space.
             </p>
-            <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5 font-mono text-xs">
+            <div className="grid grid-cols-2 gap-3 md:gap-4 pt-3 md:pt-4 border-t border-white/5 font-mono text-xs">
               <div>
-                <span className="text-white/40 block">SAMPLING</span>
-                <span className="text-white font-medium">96kHz / 24-bit Hi-Res</span>
+                <span className="text-white/40 block text-[10px] md:text-xs">SAMPLING</span>
+                <span className="text-white font-medium text-xs md:text-sm">96kHz / 24-bit Hi-Res</span>
               </div>
               <div>
-                <span className="text-white/40 block">SPATIAL CHANNELS</span>
-                <span className="text-white font-medium">Full Object-Based Sphere</span>
+                <span className="text-white/40 block text-[10px] md:text-xs">SPATIAL CHANNELS</span>
+                <span className="text-white font-medium text-xs md:text-sm">Full Object-Based Sphere</span>
               </div>
             </div>
           </div>
 
           {/* Card 6: Seamless Multipoint */}
-          <div className="glass-panel p-8 rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
-            <div className="p-3 bg-white/5 w-fit rounded-2xl mb-6 text-accent-cyan">
-              <Zap className="w-6 h-6" />
+          <div className="glass-panel p-5 md:p-8 rounded-2xl md:rounded-3xl border border-white/10 relative overflow-hidden group hover:border-accent-cyan/40 transition-all duration-500">
+            <div className="p-2.5 md:p-3 bg-white/5 w-fit rounded-xl md:rounded-2xl mb-4 md:mb-6 text-accent-cyan">
+              <Zap className="w-5 h-5 md:w-6 md:h-6" />
             </div>
-            <span className="text-xs font-mono text-accent-cyan uppercase tracking-widest">
+            <span className="text-[10px] md:text-xs font-mono text-accent-cyan uppercase tracking-wider md:tracking-widest">
               Connectivity
             </span>
-            <h3 className="text-2xl font-bold text-white mt-2 mb-3">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mt-1.5 md:mt-2 mb-2 md:mb-3 leading-tight">
               Bluetooth® 5.4 & Multipoint
             </h3>
-            <p className="text-sm text-white/60 leading-relaxed">
+            <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
               Pair simultaneously to two devices. When a call arrives, the XM6 intelligently switches audio without missing a single syllable.
             </p>
           </div>

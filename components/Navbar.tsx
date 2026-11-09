@@ -37,18 +37,18 @@ export default function Navbar({ onPreOrderClick }: NavbarProps) {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? 'glass-nav py-3'
-            : 'bg-transparent py-5 border-b border-transparent'
+            ? 'glass-nav py-2.5 md:py-3'
+            : 'bg-transparent py-3 md:py-5 border-b border-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between">
           {/* Left: Sony Logo + Product Name */}
-          <div className="flex items-center space-x-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <span className="font-semibold tracking-[0.2em] text-xs uppercase text-white/90 group-hover:text-white transition-colors">
+          <div className="flex items-center space-x-2 md:space-x-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <span className="font-semibold tracking-[0.2em] text-[11px] md:text-xs uppercase text-white/90 group-hover:text-white transition-colors">
               SONY
             </span>
-            <span className="h-3 w-[1px] bg-white/20" />
-            <span className="font-medium text-sm tracking-tight text-white/90 group-hover:text-accent-cyan transition-colors">
+            <span className="h-2.5 md:h-3 w-[1px] bg-white/20" />
+            <span className="font-medium text-xs md:text-sm tracking-tight text-white/90 group-hover:text-accent-cyan transition-colors">
               WH-1000XM6
             </span>
           </div>
@@ -84,44 +84,44 @@ export default function Navbar({ onPreOrderClick }: NavbarProps) {
           </div>
 
           {/* Mobile menu trigger */}
-          <div className="flex md:hidden items-center space-x-3">
+          <div className="flex md:hidden items-center space-x-2">
             <button
               onClick={onPreOrderClick}
-              className="px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-accent-blue to-accent-cyan text-white shadow-sm"
+              className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-gradient-to-r from-accent-blue to-accent-cyan text-white shadow-sm"
             >
               Pre-order
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors"
+              className="p-1 rounded-lg text-white/70 hover:text-white hover:bg-white/5 transition-colors"
               aria-label="Toggle Menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </button>
           </div>
         </div>
 
         {/* Mobile dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden glass-panel border-t border-white/10 px-6 py-6 mt-3 space-y-4 animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className="md:hidden glass-panel border-t border-white/10 px-5 py-4 mt-2 space-y-3 animate-in fade-in slide-in-from-top-4 duration-300">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm text-white/80 hover:text-accent-cyan transition-colors"
+                className="block text-xs text-white/80 hover:text-accent-cyan transition-colors"
               >
                 {link.label}
               </a>
             ))}
-            <div className="pt-4 border-t border-white/10 flex items-center justify-between">
-              <span className="text-xs text-white/50 font-mono">Sony Flagship Series</span>
+            <div className="pt-3 border-t border-white/10 flex items-center justify-between">
+              <span className="text-[11px] text-white/50 font-mono">Sony Flagship Series</span>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   if (onPreOrderClick) onPreOrderClick();
                 }}
-                className="w-full mt-2 py-2.5 rounded-full text-xs font-medium bg-gradient-to-r from-accent-blue to-accent-cyan text-white text-center shadow-lg"
+                className="w-full mt-2 py-2 rounded-full text-xs font-medium bg-gradient-to-r from-accent-blue to-accent-cyan text-white text-center shadow-lg"
               >
                 Experience WH-1000XM6
               </button>

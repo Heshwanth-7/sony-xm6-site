@@ -82,59 +82,59 @@ export default function TechSpecs() {
   ];
 
   return (
-    <section id="specs" className="relative py-32 bg-[#0A0A0C] text-white border-t border-white/5">
-      <div className="max-w-5xl mx-auto px-6 sm:px-8">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full glass-panel border border-white/10 mb-4">
-            <Sliders className="w-3.5 h-3.5 text-accent-cyan" />
-            <span className="text-[11px] uppercase tracking-[0.2em] text-white/70 font-mono">
+    <section id="specs" className="relative py-16 md:py-32 bg-[#0A0A0C] text-white border-t border-white/5">
+      <div className="max-w-5xl mx-auto px-5 sm:px-8">
+        <div className="text-center mb-8 md:mb-16">
+          <div className="inline-flex items-center space-x-1.5 md:space-x-2 px-2.5 py-1 md:px-3 md:py-1 rounded-full glass-panel border border-white/10 mb-2.5 md:mb-4">
+            <Sliders className="w-3 h-3 md:w-3.5 md:h-3.5 text-accent-cyan" />
+            <span className="text-[10px] md:text-[11px] uppercase tracking-wider md:tracking-[0.2em] text-white/70 font-mono">
               Complete Specifications
             </span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight text-white mb-2 md:mb-4 leading-tight">
             Master Technical Datasheet
           </h2>
-          <p className="text-sm sm:text-base text-white/60">
+          <p className="text-xs sm:text-sm md:text-base text-white/70 max-w-xl mx-auto leading-relaxed">
             Engineered down to the micrometer for uncompromising audiophile fidelity.
           </p>
         </div>
 
         {/* Expandable Accordion Categories */}
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           {categories.map((cat) => {
             const isOpen = openCategory === cat.id;
 
             return (
               <div
                 key={cat.id}
-                className="glass-panel rounded-2xl border border-white/10 overflow-hidden transition-all duration-300"
+                className="glass-panel rounded-xl md:rounded-2xl border border-white/10 overflow-hidden transition-all duration-300"
               >
                 <button
                   onClick={() => setOpenCategory(isOpen ? null : cat.id)}
-                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors"
+                  className="w-full px-4 py-3.5 sm:px-6 sm:py-5 flex items-center justify-between text-left hover:bg-white/[0.02] transition-colors"
                 >
-                  <span className="text-base sm:text-lg font-semibold text-white/90">
+                  <span className="text-sm sm:text-base md:text-lg font-semibold text-white/90">
                     {cat.title}
                   </span>
                   <ChevronDown
-                    className={`w-5 h-5 text-accent-cyan transition-transform duration-300 ${
+                    className={`w-4 h-4 md:w-5 md:h-5 text-accent-cyan transition-transform duration-300 ${
                       isOpen ? 'rotate-180' : ''
                     }`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div className="px-6 pb-6 pt-2 border-t border-white/5">
+                  <div className="px-4 pb-4 pt-1 sm:px-6 sm:pb-6 sm:pt-2 border-t border-white/5">
                     <dl className="divide-y divide-white/5">
                       {cat.specs.map((item, idx) => (
                         <div
                           key={idx}
-                          className="py-3 sm:grid sm:grid-cols-3 sm:gap-4 flex flex-col justify-between"
+                          className="py-2.5 sm:py-3 sm:grid sm:grid-cols-3 sm:gap-4 flex flex-col justify-between"
                         >
-                          <dt className="text-xs sm:text-sm font-medium text-white/50 font-mono">
+                          <dt className="text-[11px] sm:text-sm font-medium text-white/50 font-mono">
                             {item.label}
                           </dt>
-                          <dd className="mt-1 sm:mt-0 sm:col-span-2 text-xs sm:text-sm text-white/90 font-mono">
+                          <dd className="mt-0.5 sm:mt-0 sm:col-span-2 text-xs sm:text-sm text-white/90 font-mono">
                             {item.value}
                           </dd>
                         </div>

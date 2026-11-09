@@ -42,34 +42,34 @@ export default function AcousticShowcase() {
   const current = modes.find((m) => m.id === activeMode)!;
 
   return (
-    <section id="noise-cancelling" className="relative py-32 bg-[#0A0A0C] text-white overflow-hidden border-t border-white/5">
+    <section id="noise-cancelling" className="relative py-16 md:py-32 bg-[#0A0A0C] text-white overflow-hidden border-t border-white/5">
       {/* Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] radial-accent-glow pointer-events-none opacity-40" />
 
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full glass-panel border border-white/10 mb-4">
-            <Shield className="w-3.5 h-3.5 text-accent-cyan" />
-            <span className="text-[11px] uppercase tracking-[0.2em] text-white/70 font-mono">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16">
+          <div className="inline-flex items-center space-x-1.5 md:space-x-2 px-2.5 py-1 md:px-3 md:py-1 rounded-full glass-panel border border-white/10 mb-2.5 md:mb-4">
+            <Shield className="w-3 h-3 md:w-3.5 md:h-3.5 text-accent-cyan" />
+            <span className="text-[10px] md:text-[11px] uppercase tracking-wider md:tracking-[0.2em] text-white/70 font-mono">
               Adaptive Noise Cancelling
             </span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-white mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight text-white mb-3 md:mb-6 leading-tight">
             Silence tuned to your reality.
           </h2>
-          <p className="text-base sm:text-lg text-white/60 leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-lg text-white/70 leading-relaxed max-w-xl mx-auto">
             Experience how the dual-chip acoustic matrix analyzes cabin pressure, ear anatomy, and atmospheric changes to sculpt perfect acoustic isolation.
           </p>
         </div>
 
         {/* Interactive Mode Switcher Tabs */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex p-1.5 rounded-2xl glass-panel border border-white/10 space-x-1">
+        <div className="flex justify-center mb-6 md:mb-12">
+          <div className="inline-flex p-1 md:p-1.5 rounded-xl md:rounded-2xl glass-panel border border-white/10 space-x-0.5 md:space-x-1 max-w-full overflow-x-auto">
             {modes.map((mode) => (
               <button
                 key={mode.id}
                 onClick={() => setActiveMode(mode.id)}
-                className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-300 ${
+                className={`px-2.5 py-2 sm:px-5 sm:py-2.5 rounded-lg md:rounded-xl text-[11px] sm:text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                   activeMode === mode.id
                     ? 'bg-gradient-to-r from-accent-blue to-accent-cyan text-white shadow-[0_0_20px_rgba(0,214,255,0.3)]'
                     : 'text-white/60 hover:text-white hover:bg-white/5'
@@ -82,10 +82,10 @@ export default function AcousticShowcase() {
         </div>
 
         {/* Acoustic Simulator Display */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-center">
           {/* Left Column: Visualizer Box */}
-          <div className="lg:col-span-7 glass-panel p-8 sm:p-10 rounded-3xl border border-white/10 relative overflow-hidden">
-            <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/10 font-mono text-xs">
+          <div className="lg:col-span-7 glass-panel p-4 sm:p-8 md:p-10 rounded-2xl md:rounded-3xl border border-white/10 relative overflow-hidden">
+            <div className="flex items-center justify-between mb-4 md:mb-8 pb-3 md:pb-4 border-b border-white/10 font-mono text-[11px] md:text-xs">
               <div className="flex items-center space-x-2">
                 <span className="w-2 h-2 rounded-full bg-accent-cyan animate-ping" />
                 <span className="text-white/80">{current.badge}</span>
@@ -94,7 +94,7 @@ export default function AcousticShowcase() {
             </div>
 
             {/* Simulated Animated Waveform Bars */}
-            <div className="h-44 sm:h-52 flex items-center justify-between gap-1 sm:gap-1.5 px-4 bg-[#050505]/70 rounded-2xl border border-white/5 relative overflow-hidden">
+            <div className="h-32 sm:h-44 md:h-52 flex items-center justify-between gap-1 sm:gap-1.5 px-3 md:px-4 bg-[#050505]/70 rounded-xl md:rounded-2xl border border-white/5 relative overflow-hidden">
               {Array.from({ length: 36 }).map((_, i) => {
                 const heightMult =
                   activeMode === 'anc'
@@ -126,8 +126,8 @@ export default function AcousticShowcase() {
               })}
 
               {/* Center Status Tag */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="px-4 py-1.5 rounded-full glass-panel text-xs font-mono uppercase tracking-widest text-white/90 border border-white/20 shadow-xl">
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none px-2 text-center">
+                <span className="px-3 py-1 md:px-4 md:py-1.5 rounded-full glass-panel text-[10px] md:text-xs font-mono uppercase tracking-wider md:tracking-widest text-white/90 border border-white/20 shadow-xl">
                   {activeMode === 'anc'
                     ? 'Inverse Anti-Noise Wave Active'
                     : activeMode === 'ambient'
@@ -138,16 +138,16 @@ export default function AcousticShowcase() {
             </div>
 
             {/* Realtime Indicators */}
-            <div className="grid grid-cols-2 gap-4 mt-6 font-mono text-xs">
-              <div className="p-3 bg-white/5 rounded-xl border border-white/5">
-                <span className="text-white/40 block mb-1">CABIN / TRAIN NOISE</span>
-                <span className="text-white font-semibold text-sm">
+            <div className="grid grid-cols-2 gap-2 md:gap-4 mt-4 md:mt-6 font-mono text-[10px] md:text-xs">
+              <div className="p-2.5 md:p-3 bg-white/5 rounded-lg md:rounded-xl border border-white/5">
+                <span className="text-white/40 block mb-0.5 md:mb-1 text-[9px] md:text-xs">CABIN / TRAIN NOISE</span>
+                <span className="text-white font-semibold text-xs md:text-sm">
                   {activeMode === 'anc' ? '0.02% (Neutralized)' : activeMode === 'ambient' ? '30% (Controlled)' : '45% (Audible)'}
                 </span>
               </div>
-              <div className="p-3 bg-white/5 rounded-xl border border-white/5">
-                <span className="text-white/40 block mb-1">CONVERSATION CLARITY</span>
-                <span className="text-white font-semibold text-sm">
+              <div className="p-2.5 md:p-3 bg-white/5 rounded-lg md:rounded-xl border border-white/5">
+                <span className="text-white/40 block mb-0.5 md:mb-1 text-[9px] md:text-xs">CONVERSATION CLARITY</span>
+                <span className="text-white font-semibold text-xs md:text-sm">
                   {activeMode === 'anc' ? 'Muted' : activeMode === 'ambient' ? 'Enhanced (Voice Passthrough)' : 'Attenuated'}
                 </span>
               </div>
@@ -155,28 +155,28 @@ export default function AcousticShowcase() {
           </div>
 
           {/* Right Column: Narrative Info */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="text-xs font-mono tracking-widest text-accent-cyan uppercase">
+          <div className="lg:col-span-5 space-y-4 md:space-y-6">
+            <div className="text-[10px] md:text-xs font-mono tracking-wider md:tracking-widest text-accent-cyan uppercase">
               Intelligent Adaptation
             </div>
-            <h3 className="text-2xl sm:text-3xl font-bold text-white">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white leading-tight">
               {current.name}
             </h3>
-            <p className="text-base text-white/60 leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base text-white/70 leading-relaxed max-w-lg">
               {current.description}
             </p>
 
-            <div className="space-y-3 pt-4 border-t border-white/10">
-              <div className="flex items-center space-x-3 text-sm text-white/80">
-                <CheckCircle2 className="w-4 h-4 text-accent-cyan flex-shrink-0" />
+            <div className="space-y-2 md:space-y-3 pt-3 md:pt-4 border-t border-white/10">
+              <div className="flex items-center space-x-2.5 md:space-x-3 text-xs md:text-sm text-white/80">
+                <CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-accent-cyan flex-shrink-0" />
                 <span>Auto-optimizer calculates barometric pressure for flight cabin use</span>
               </div>
-              <div className="flex items-center space-x-3 text-sm text-white/80">
-                <CheckCircle2 className="w-4 h-4 text-accent-cyan flex-shrink-0" />
+              <div className="flex items-center space-x-2.5 md:space-x-3 text-xs md:text-sm text-white/80">
+                <CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-accent-cyan flex-shrink-0" />
                 <span>Speak-to-Chat pauses playback automatically when you start talking</span>
               </div>
-              <div className="flex items-center space-x-3 text-sm text-white/80">
-                <CheckCircle2 className="w-4 h-4 text-accent-cyan flex-shrink-0" />
+              <div className="flex items-center space-x-2.5 md:space-x-3 text-xs md:text-sm text-white/80">
+                <CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4 text-accent-cyan flex-shrink-0" />
                 <span>Zero ear-pressure sensation via calibrated micro-relief vents</span>
               </div>
             </div>
