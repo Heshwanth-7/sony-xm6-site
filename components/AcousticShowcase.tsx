@@ -42,12 +42,12 @@ export default function AcousticShowcase() {
   const current = modes.find((m) => m.id === activeMode)!;
 
   return (
-    <section id="noise-cancelling" className="relative py-16 md:py-32 bg-[#0A0A0C] text-white overflow-hidden border-t border-white/5">
+    <section id="noise-cancelling" className="relative py-12 md:py-32 bg-[#0A0A0C] text-white overflow-hidden border-t border-white/5">
       {/* Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] radial-accent-glow pointer-events-none opacity-40" />
 
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-6 md:mb-16">
           <div className="inline-flex items-center space-x-1.5 md:space-x-2 px-2.5 py-1 md:px-3 md:py-1 rounded-full glass-panel border border-white/10 mb-2.5 md:mb-4">
             <Shield className="w-3 h-3 md:w-3.5 md:h-3.5 text-accent-cyan" />
             <span className="text-[10px] md:text-[11px] uppercase tracking-wider md:tracking-[0.2em] text-white/70 font-mono">
@@ -63,7 +63,7 @@ export default function AcousticShowcase() {
         </div>
 
         {/* Interactive Mode Switcher Tabs */}
-        <div className="flex justify-center mb-6 md:mb-12">
+        <div className="flex justify-center mb-4 md:mb-12">
           <div className="inline-flex p-1 md:p-1.5 rounded-xl md:rounded-2xl glass-panel border border-white/10 space-x-0.5 md:space-x-1 max-w-full overflow-x-auto">
             {modes.map((mode) => (
               <button
@@ -84,7 +84,7 @@ export default function AcousticShowcase() {
         {/* Acoustic Simulator Display */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-center">
           {/* Left Column: Visualizer Box */}
-          <div className="lg:col-span-7 glass-panel p-4 sm:p-8 md:p-10 rounded-2xl md:rounded-3xl border border-white/10 relative overflow-hidden">
+          <div className="lg:col-span-7 glass-panel p-4 sm:p-6 md:p-10 rounded-xl md:rounded-3xl border border-white/10 relative overflow-hidden">
             <div className="flex items-center justify-between mb-4 md:mb-8 pb-3 md:pb-4 border-b border-white/10 font-mono text-[11px] md:text-xs">
               <div className="flex items-center space-x-2">
                 <span className="w-2 h-2 rounded-full bg-accent-cyan animate-ping" />
